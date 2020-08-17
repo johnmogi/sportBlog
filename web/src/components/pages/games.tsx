@@ -5,8 +5,11 @@ import { CommentModel } from "../models/Comments-model";
 interface GameBoxState {
   games: GameModel[];
   comments: CommentModel[];
+  comment:CommentModel; 
   game: GameModel;
   gamesLoad : Boolean;
+  commentLoad : Boolean;
+
 }
 
 class GamesPage extends React.Component<any, GameBoxState> {
@@ -15,8 +18,10 @@ class GamesPage extends React.Component<any, GameBoxState> {
     this.state = {
       games: [],
       comments: [],
+      comment: new CommentModel(),
       game: new GameModel(),
-      gamesLoad : false
+      gamesLoad : false,
+      commentLoad  : false
     };
   }
   public componentDidMount(): void {
@@ -30,6 +35,7 @@ public componentDidUpdate(): void{
         this.viewComments();
 this.setState({ gamesLoad : false });
     }
+
 }
   public viewComments = () => {
       const gameID = this.state.game.gameID
@@ -47,9 +53,29 @@ this.setState({ gamesLoad : false });
     this.setState({ gamesLoad : true });
   };
 
+
+  private setComment = (args: SyntheticEvent) => {
+    const commentComment = (args.target as HTMLInputElement).value;
+    const comment = this.state.comment;
+    comment.comment = commentComment;
+    this.setState({ comment });
+    this.setState({ commentLoad : true });
+  };
+  public addComment = () => {
+    console.log(this.state.comment)
+  //   const gameID = this.state.game.gameID
+  // fetch(`http://localhost:3006/api/comments/comment/${gameID}`)
+  //   .then((response) => response.json())
+  //   .then((comments) => this.setState({ comments }))
+  //   .catch((err) => alert(err.message));
+};
+  
+
   render() {
     return (
         <>
+        <h2>Check out our curated list of games: </h2>
+        <p>Click on a game to check for user comments...</p>
       <div className="row">
         {this.state.games.map((g) => (
           <div className="card col-4" key={g.gameID}>
@@ -60,7 +86,7 @@ this.setState({ gamesLoad : false });
         ))}
         </div>
         <hr />
-{ this.state.comments ? 
+
         <div className="row">
         {this.state.comments.map((c) => (
           <div className="card col-4" key={c.commentID}>
@@ -69,8 +95,26 @@ this.setState({ gamesLoad : false });
           </div>
         ))}
 </div>
- : "no comments" }
-        {/* <GamesPage gameID={this.state.game.gameID}  /> */}
+
+<hr/>
+<h3> Add Your comment...</h3>
+<form>
+  <label>Choose a game :</label>
+<select onChange={this.setGameID}>
+<option disabled placeholder="Choose a game">Please select:</option>
+        {this.state.games.map(g =>
+        <option key={g.gameID} value={g.gameID}>
+           {g.teamA} VS. {g.teamB}
+        </option>
+    )}
+    </select>
+    <br /><br />
+
+   <textarea onChange={this.setComment} value={this.state.comment.comment} ></textarea>
+  <br /><br />
+  <button type="button" className="btn btn-info" onClick={this.addComment}>Add Comment</button> 
+  </form>
+
       </>
     );
   }
