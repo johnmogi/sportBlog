@@ -31,12 +31,14 @@ router.post("/", async(request, response) => {
   const year = date.getFullYear()
   const month = date.getMonth() +1
   const day = date.getDay()
-  const dateNow = `${year}-${month}-${day}`
-
-  info.reviewDate = dateNow
-
+  const hours = date.getHours()
+  const minutes = date.getMinutes()
+  const seconds = date.getSeconds()
+  const dateNow = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
+  info.commentTime = dateNow
+// console.log(info)
   try {
-      const comment = await commentsLogic.AddOnecommentAsync(info);
+      const comment = await commentsLogic.AddOneCommentAsync(info);
       response.json(comment);
   } catch (err) {
       response.status(500).send(err.message);

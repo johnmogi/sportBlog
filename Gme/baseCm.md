@@ -26,7 +26,21 @@ redirect inside switch
           <Route path="/games/:cat" component={Category} />
           <Route path="" component={NotFound} exact /> 
         </Switch>
-
+{menu structure}
+ <div id="header">
+        <ul className="nav">
+          <li className="nav-item">
+            <NavLink className="nav-link" to="/" exact>
+              Home
+            </NavLink>
+          </li>
+          <li className="nav-item">
+            <NavLink className="nav-link" to="/games" exact>
+              games
+            </NavLink>
+          </li>
+        </ul>
+      </div>
 
 1. touch layout.tsx:
 import React, { Component } from "react"; 
